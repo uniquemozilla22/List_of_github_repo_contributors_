@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import SearchIcon from "@mui/icons-material/Search";
 export const SearchComponent = ({ onChange, value, handleSubmit }) => {
   return (
-    <Container handlSubmit={handleSubmit}>
+    <Container onSubmit={handleSubmit}>
       <Input
         icon={<SearchIcon sx={{ color: "action.active", mr: 1, my: 0.5 }} />}
         label={"Paste your github repositary link here"}

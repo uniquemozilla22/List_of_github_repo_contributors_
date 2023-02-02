@@ -7,11 +7,12 @@ import {
   Route,
   RouterProvider,
 } from "react-router-dom";
+import { ListPage } from "../pages/List.page";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path="list" element={<h1>Home</h1>} />
+      <Route path="list" element={<ListPage />} />
       <Route path="/" element={<HomePage />} exact />
     </>
   )
