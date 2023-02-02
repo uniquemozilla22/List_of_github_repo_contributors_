@@ -1,8 +1,19 @@
-import { configureStore } from "@reduxjs/toolkit";
-import contributors from "./slice/contributors";
+import {
+  applyMiddleware,
+  combineReducers,
+  configureStore,
+  createStore,
+} from "@reduxjs/toolkit";
+import { contributors } from "./slice/contributors";
 
-export const store = configureStore({
-  reducer: {
-    contributors,
-  },
+import thunkMiddleware from "redux-thunk";
+import { createStoreHook } from "react-redux";
+
+const composedEnhancer = applyMiddleware(thunkMiddleware);
+const reducer = combineReducers({
+  contributors,
 });
+export const store = configureStore(
+  { reducer, middleware: [thunkMiddleware] },
+  composedEnhancer
+);

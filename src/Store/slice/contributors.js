@@ -1,31 +1,46 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { RepeatOneSharp } from "@mui/icons-material";
+import {
+  combineReducers,
+  createAsyncThunk,
+  createSlice,
+} from "@reduxjs/toolkit";
 import axios from "axios";
 
-const initialState = { data: null };
+const initialState = { status: "idle", data: {}, error: {} };
 
-const fetch = async (state, action) => {
-  console.log("fetch Called", action.payload);
-
+export const fetchContributors = (link) => async (dispatch) => {
   try {
     const { data } = await axios.get(
-      `https://api.github.com/repos${action.payload}/contributors`
+      `https://api.github.com/repos${link}/contributors`
     );
-    console.log(data);
-    state.data = data;
-    return data;
+    dispatch({ type: "fetchContributors", payload: { data } });
   } catch (e) {
-    console.log({ ...e });
+    dispatch({ type: "fetchContributors/error", payload: { data: e } });
   }
 };
-export const contributors = createSlice({
-  name: "contributors",
-  initialState,
-  reducers: {
-    fetchContributors: fetch,
-  },
-});
 
-// Action creators are generated for each case reducer function
-export const { fetchContributors } = contributors.actions;
+export const contributors = (state = initialState, action) => {
+  switch (action.type) {
+    case "fetchContributors": {
+      const ModifiedState = {
+        status: "success",
+        data: action.payload.data,
+        error: null,
+      };
+      return ModifiedState;
+    }
+    case "fetchContributors/error": {
+      const ModifiedState = {
+        status: "error",
+        data: null,
+        error: action.payload.data,
+      };
 
-export default contributors.reducer;
+      return ModifiedState;
+    }
+
+    default: {
+      return state;
+    }
+  }
+};
