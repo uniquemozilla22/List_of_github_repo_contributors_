@@ -8,7 +8,7 @@ export const HomePage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    navigation("list", { state: { id: 7, color: "green" } });
+    navigation("list", { state: { link: input } });
   };
 
   return (
