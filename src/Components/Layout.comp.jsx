@@ -10,10 +10,12 @@ import {
 import { ListPage } from "../pages/List.page";
 import { Provider } from "react-redux";
 import { store } from "../Store/store";
+import { DetailPage } from "../pages/Detail.page";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
+      <Route path="userdetail" element={<DetailPage />} />
       <Route path="list" element={<ListPage />} />
       <Route path="/" element={<HomePage />} exact />
     </>
@@ -39,4 +41,5 @@ const Container = styled.div`
   gap: 1rem;
   justify-content: center;
   align-items: center;
+  overflow-y: hidden;
 `;

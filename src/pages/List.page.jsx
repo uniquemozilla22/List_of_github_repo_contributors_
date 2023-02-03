@@ -6,10 +6,11 @@ import { ListComponent } from "../Components/List.comp";
 import styled from "@emotion/styled";
 export const ListPage = (props) => {
   const { state } = useLocation();
+  const [count, setCount] = useState(1);
   const dispatch = useDispatch();
   const contributors = useSelector((state) => state.contributors);
   const [data, setData] = useState(contributors);
-  const fetchData = useCallback((link) => {
+  const fetchData = useCallback((link, count) => {
     try {
       dispatch(fetchContributors(link));
     } catch (err) {
@@ -18,20 +19,31 @@ export const ListPage = (props) => {
   });
 
   useEffect(() => {
-    fetchData(new URL(state.link).pathname);
+    fetchData(new URL(state.link).pathname, count);
+    dispatch({ type: "fetchUserDetail/destroy" });
   }, [state.link]);
   return (
-    <Container>
-      {contributors?.status === "success" ? (
-        contributors.data.map((data, index) => (
-          <ListComponent key={index} {...data} />
-        ))
-      ) : (
-        <h1>Loading...</h1>
-      )}
-    </Container>
+    <Wrapper>
+      <h1 style={{ flex: 10 }}>Contributors</h1>
+      <Container>
+        {contributors?.status === "success" ? (
+          contributors.data.map((data, index) => (
+            <ListComponent key={index} {...data} />
+          ))
+        ) : (
+          <h1>Loading...</h1>
+        )}
+      </Container>
+    </Wrapper>
   );
 };
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 10rem;
+`;
 
 const Container = styled.div`
   display: flex;
@@ -40,4 +52,6 @@ const Container = styled.div`
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
+  height:90vh;
+  overflow-y:scroll;
 `;

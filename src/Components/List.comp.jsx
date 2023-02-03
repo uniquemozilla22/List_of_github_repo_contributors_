@@ -1,14 +1,18 @@
 import styled from "@emotion/styled";
 import { GitHub } from "@mui/icons-material";
 import { Avatar, Tooltip } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
-export const ListComponent = ({ login, avatar_url }) => {
+export const ListComponent = ({ login, avatar_url, contributions }) => {
+  const navigation = useNavigate();
   return (
-    <Container>
-      <Avatar src={avatar_url} sx={{ width: 40, height: 40 }} />
-
+    <Container
+      onClick={() => navigation("/userdetail", { state: { username: login } })}
+    >
+      <Avatar src={avatar_url} sx={{ width: 100, height: 100 }} />
       <ContentContainer>
         <h1>{login}</h1>
+        <p>Contributions: {contributions}</p>
         <IconContainer>
           <Tooltip title={`Visit ${login}'s github`}>
             <GitHub />
@@ -23,14 +27,27 @@ const Container = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  width: 400px;
-  gap: 1rem;
+  width: 40%;
+  min-width: 300px;
+  gap: 2rem;
+  max-height: 100%;
+  border: 1px solid #fafafa;
+  padding: 1rem;
+  border-radius: 10px;
+
+  &:hover h1 {
+    text-decoration: underline;
+  }
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const ContentContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  flex: 3;
 `;
 
 const IconContainer = styled.div``;

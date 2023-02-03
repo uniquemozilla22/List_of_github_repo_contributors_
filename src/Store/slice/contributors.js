@@ -6,14 +6,19 @@ import {
 } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const initialState = { status: "idle", data: {}, error: {} };
+const initialState = { status: "idle", data: null, error: null };
 
-export const fetchContributors = (link) => async (dispatch) => {
+export const fetchContributors = (link, page) => async (dispatch) => {
   try {
     const { data } = await axios.get(
-      `https://api.github.com/repos${link}/contributors`
+      `https://api.github.com/repos${link}/contributors`,
+      { page }
     );
-    dispatch({ type: "fetchContributors", payload: { data } });
+    if (page > 1) {
+      dispatch({ type: "fetchContributors/add", payload: { data } });
+    } else {
+      dispatch({ type: "fetchContributors", payload: { data } });
+    }
   } catch (e) {
     dispatch({ type: "fetchContributors/error", payload: { data: e } });
   }
@@ -34,6 +39,16 @@ export const contributors = (state = initialState, action) => {
         status: "error",
         data: null,
         error: action.payload.data,
+      };
+
+      return ModifiedState;
+    }
+
+    case "fetchContributors/add": {
+      const ModifiedState = {
+        status: "error",
+        data: [...state.data, ...action.payload.data],
+        error: null,
       };
 
       return ModifiedState;
