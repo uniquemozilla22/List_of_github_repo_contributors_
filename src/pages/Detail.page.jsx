@@ -61,7 +61,7 @@ export const DetailPage = () => {
   }, [fetchData]);
   return data ? (
     <Container>
-      <Title>{data?.name}</Title>
+      <Title>{data?.name || data.login}</Title>
       <IconContainer>
         <Tooltip title={`Visit ${data.login} github`} sx={{ float: "right" }}>
           <GitHub />
